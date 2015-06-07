@@ -11,24 +11,29 @@ package ash.integration.swiftsuspenders
 	 * of NodeList objects based on the node class they contain.
 	 * 
 	 * <p>This enables injections rules like</p>
-	 * 
-	 * <p>[Inject(nodeType="com.myDomain.project.nodes.MyNode")]
+	 *
+	 * <p>[Inject(nodeType="MyNode")]
 	 * public var nodes : NodeList;</p>
+	 *
+	 * Has to be provided by nodes package, to be capable find MyNode in it.
 	 */
 	public class NodeListProvider implements DependencyProvider
 	{
 		private var engine : Engine;
+		private var nodesPackage : String;
 
-		public function NodeListProvider( engine : Engine )
+		public function NodeListProvider( engine : Engine, nodesPackage : String )
 		{
 			this.engine = engine;
+			this.nodesPackage = nodesPackage + ".";
 		}
 
 		public function apply( targetType : Class, activeInjector : Injector, injectParameters : Dictionary ) : Object
 		{
 			if ( injectParameters["nodeType"] )
 			{
-				var nodeClass : Class = getDefinitionByName( injectParameters["nodeType"] ) as Class;
+				var nodeDefinitionName : String = nodesPackage + injectParameters["nodeType"];
+				var nodeClass : Class = getDefinitionByName( nodeDefinitionName ) as Class;
 				if ( nodeClass )
 				{
 					return engine.getNodeList( nodeClass );

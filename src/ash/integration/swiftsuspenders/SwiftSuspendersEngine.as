@@ -14,17 +14,17 @@ package ash.integration.swiftsuspenders
 	{
 		protected var injector : Injector;
 		
-		public function SwiftSuspendersEngine( injector : Injector )
+		public function SwiftSuspendersEngine( injector : Injector, nodesPackage : String )
 		{
 			super();
 			this.injector = injector;
-			injector.map( NodeList ).toProvider( new NodeListProvider( this ) );
+			injector.map( NodeList ).toProvider( new NodeListProvider( this, nodesPackage ) );
 		}
 		
-		override public function addSystem( system : System, priority : int ) : void
+		override public function addSystem( system : System, priority : int ) : System
 		{
 			injector.injectInto( system );
-			super.addSystem( system, priority );
+			return super.addSystem( system, priority );
 		}
 	}
 }
