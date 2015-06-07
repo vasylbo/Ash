@@ -49,7 +49,7 @@ package ash.core
 		 * 
 		 * @param entity The entity to add.
 		 */
-		public function addEntity( entity : Entity ) : void
+		public function addEntity( entity : Entity ) : Entity
 		{
 			if( entityNames[ entity.name ] )
 			{
@@ -64,6 +64,8 @@ package ash.core
 			{
 				family.newEntity( entity );
 			}
+
+			return entity;
 		}
 		
 		/**
@@ -71,7 +73,7 @@ package ash.core
 		 * 
 		 * @param entity The entity to remove.
 		 */
-		public function removeEntity( entity : Entity ) : void
+		public function removeEntity( entity : Entity ) : Entity
 		{
 			entity.componentAdded.remove( componentAdded );
 			entity.componentRemoved.remove( componentRemoved );
@@ -82,6 +84,8 @@ package ash.core
 			}
 			delete entityNames[ entity.name ];
 			entityList.remove( entity );
+
+			return entity;
 		}
 		
 		private function entityNameChanged( entity : Entity, oldName : String ) : void
@@ -208,11 +212,13 @@ package ash.core
 		 * @param priority The priority for updating the systems during the engine loop. A 
 		 * lower number means the system is updated sooner.
 		 */
-		public function addSystem( system : System, priority : int ) : void
+		public function addSystem( system : System, priority : int ) : System
 		{
 			system.priority = priority;
 			system.addToEngine( this );
 			systemList.add( system );
+
+			return system;
 		}
 		
 		/**
@@ -245,10 +251,12 @@ package ash.core
 		 * 
 		 * @param system The system to remove from the engine.
 		 */
-		public function removeSystem( system : System ) : void
+		public function removeSystem( system : System ) : System
 		{
 			systemList.remove( system );
 			system.removeFromEngine( this );
+
+			return system;
 		}
 		
 		/**
